@@ -62,3 +62,7 @@ typings/
 
 # config folder
 config/
+
+# package.json files
+package.json
+package-lock.json

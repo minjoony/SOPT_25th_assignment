@@ -1,21 +1,23 @@
 var express = require('express');
-var router = express.Router({mergeParams: true});
+var router = express.Router({mergeParams: true}); // mergeParams 디폴트는 false다. 이는 /:로 넘어온 값을 그 다음 routes로 못 넘겨준다.
 
 const aU = require('../../module/utils/authUtil');
 const rM = require('../../module/utils/responseMessage');
 const sC = require('../../module/utils/statusCode');
 const Blog = require('../../model/Blog');
 
+const THIS_LOG = "블로그";
+
 // 1. 블로그 전체 보기
 router.get('/', (req, res) => {
-  Blog.readAll.then(({
+  Blog.readAll().then(({
     code,
     json
   }) => {
     res.status(code).send(json);
   }).catch(err => {
     console.log(err);
-    res.status(sC.INTERNAL_SERVER_ERROR).send(aU.successFalse(rM.POST_READ_ALL_FAIL));
+    res.status(sC.INTERNAL_SERVER_ERROR).send(aU.successFalse(rM.X_READ_ALL_FAIL(THIS_LOG)));
   });
 });
 
@@ -28,7 +30,7 @@ router.get('/:blogIdx', async (req, res) => {
     res.status(code).send(json);
   }).catch(err => {
     console.log(err);
-    res.status(sC.INTERNAL_SERVER_ERROR).send(aU.successFalse(rM.POST_READ_FAIL));
+    res.status(sC.INTERNAL_SERVER_ERROR).send(aU.successFalse(rM.X_READ_FAIL(THIS_LOG)));
   });
 });
 
@@ -41,7 +43,7 @@ router.post('/', async (req, res) => {
     res.status(code).send(json);
   }).catch(err => {
     console.log(err);
-    res.status(sC.INTERNAL_SERVER_ERROR).send(aU.successFalse(rM.POST_CREATE_FAIL));
+    res.status(sC.INTERNAL_SERVER_ERROR).send(aU.successFalse(rM.X_CREATE_FAIL(THIS_LOG)));
   });
 });
 
@@ -54,7 +56,7 @@ router.put('/', (req, res) => {
     res.status(code).send(json);
   }).catch(err => {
     console.log(err);
-    res.status(sC.INTERNAL_SERVER_ERROR).send(aU.successFalse(rM.POST_UPDATE_FAIL));
+    res.status(sC.INTERNAL_SERVER_ERROR).send(aU.successFalse(rM.X_UPDATE_FAIL(THIS_LOG)));
   });
 });
 
@@ -67,7 +69,7 @@ router.delete('/', (req, res) => {
     res.status(code).send(json);
   }).catch(err => {
     console.log(err);
-    res.status(sC.INTERNAL_SERVER_ERROR).send(aU.successFalse(rM.POST_DELETE_FAIL));
+    res.status(sC.INTERNAL_SERVER_ERROR).send(aU.successFalse(rM.X_DELETE_FAIL(THIS_LOG)));
   });
 });
 

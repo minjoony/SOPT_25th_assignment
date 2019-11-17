@@ -15,21 +15,26 @@ const blog = {
         date
     }) => {
         return new Promise(async (resolve, reject) => {
+            console.log(title, content, writer, date);
             if(!title || !content || !writer || !date) {
                 resolve({
                     code: sC.NOT_FOUND,
                     json: aU.successFalse(rM.NULL_VALUE)
                 });
+                return;
             }
         
             const postBlogQuery = 'INSERT INTO blog(title, content, writer, date) VALUES (?, ?, ?, ?)';
             const postBlogResult = await db.queryParam_Parse(postBlogQuery, [title, content, writer, date]);
+
+            //const blog = blogData(postBlogResult[0]);
 
             if(!postBlogResult) {
                 resolve({
                     code: sC.NOT_FOUND,
                     json: aU.successFalse(rM.X_CREATE_FAIL(THIS_LOG))
                 });
+                return;
             }
 
             resolve({
@@ -39,23 +44,24 @@ const blog = {
         });
     },
 
-    read: (blogIdx) => {
+    readOne: (blogIdx) => {
         return new Promise(async (resolve, reject) => {
             const getBlogQuery = 'SELECT * FROM blog WHERE blogIdx = ?';
             const getBlogResult = await db.queryParam_Parse(getBlogQuery, [blogIdx]);
 
-            if(!getBlogResult) {    //if(getBlogResult.length == 0) { ???
+            if(!getBlogResult) {
                 resolve({
                     code: sC.NOT_FOUND,
                     json: aU.successFalse(rM.X_READ_FAIL(THIS_LOG))
                 });
+                return;
             }
 
-            const blog = blogData(getBlogResult); //const blog = blogData(getBlogResult[0]);
+            const blog = blogData(getBlogResult[0]);
 
             resolve({
                 code: sC.OK,
-                json: aU.successTrue(rM.X_READ_SUCCESS(THIS_LOG))
+                json: aU.successTrue(rM.X_READ_SUCCESS(THIS_LOG), blog)
             });
         });
     },
@@ -70,6 +76,7 @@ const blog = {
                     code: sC.NOT_FOUND,
                     json: aU.successFalse(rM.X_READ_ALL_FAIL(THIS_LOG))
                 });
+                return;
             }
 
             const blogArr = [];
@@ -78,8 +85,8 @@ const blog = {
             });
             
             resolve({
-                code: statusCode.OK,
-                json: authUtil.successTrue(responseMessage.X_READ_ALL_SUCCESS(THIS_LOG), blogArr)
+                code: sC.OK,
+                json: aU.successTrue(rM.X_READ_ALL_SUCCESS(THIS_LOG), blogArr)
             });
         });
     },
@@ -97,15 +104,17 @@ const blog = {
                     code: sC.NOT_FOUND,
                     json: aU.successFalse(rM.NULL_VALUE)
                 });
+                return;
             }
             const putBlogQuery = 'UPDATE blog SET title = ?, content = ?, writer = ?, date = ? WHERE blogIdx = ?';
-            const putBlogResult = await db.queryParam_Parse(putBlogQuery, [blogIdx, title, content, writer, date])
+            const putBlogResult = await db.queryParam_Parse(putBlogQuery, [title, content, writer, date, blogIdx])  // 순서 맞아야함
             console.log(putBlogResult);
             if(!putBlogResult) {
                 resolve({
                     code: sC.NOT_FOUND,
                     json: aU.successFalse(rM.X_UPDATE_FAIL(THIS_LOG))
                 });
+                return;
             }
 
             resolve({
@@ -115,22 +124,30 @@ const blog = {
         });
     },
 
-    remove: (body) => {
+    delete: ({blogIdx}) => {
         return new Promise(async(resolve, reject) => {
+            if(!blogIdx) {
+                resolve({
+                    code: sC.NOT_FOUND,
+                    json: aU.successFalse(rM.NULL_VALUE)
+                });
+                return;
+            }
             const deleteBlogQuery = 'DELETE FROM blog WHERE blogIdx = ?';
-            const deleteBlogResult = await db.queryParam_Parse(deleteBlogQuery,[body.blogIdx]);
+            const deleteBlogResult = await db.queryParam_Parse(deleteBlogQuery,[blogIdx]);
             console.log(deleteBlogResult);
 
             if(!deleteBlogResult) {
                 resolve({
-                    code: statusCode.NOT_FOUND,
-                    json: authUtil.successFalse(responseMessage.X_DELETE_FAIL(THIS_LOG))
+                    code: sC.NOT_FOUND,
+                    json: aU.successFalse(rM.X_DELETE_FAIL(THIS_LOG))
                 });
+                return;
             }
 
             resolve({
-                code: statusCode.OK,
-                json: authUtil.successTrue(responseMessage.X_DELETE_SUCCESS(THIS_LOG))
+                code: sC.OK,
+                json: aU.successTrue(rM.X_DELETE_SUCCESS(THIS_LOG))
             });
         });
     }

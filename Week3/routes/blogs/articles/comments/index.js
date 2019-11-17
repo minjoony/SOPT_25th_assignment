@@ -1,10 +1,11 @@
 var express = require('express');
-var rounter = express.Router();
+var router = express.Router();
+
+router.use('/', require('./comment'));
 
 router.get('/', function(req, res) {
     res.send('comments');
 })
 
-router.use('/', require('./comment'));
 
 module.exports = router;
