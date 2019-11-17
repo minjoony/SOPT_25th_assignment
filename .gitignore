@@ -61,4 +61,4 @@ typings/
 .next
 
 # config folder
-config/*
+config/
