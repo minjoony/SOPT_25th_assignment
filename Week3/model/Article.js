@@ -12,7 +12,7 @@ const article = {
         title,
         content,
         writer
-    }) => {
+    }, blogIdx) => {
         return new Promise(async (resolve, reject) => {
             console.log(title, content, writer);
             if(!title || !content || !writer) {
@@ -23,8 +23,8 @@ const article = {
                 return;
             }
 
-            const postArticleQuery = 'INSERT INTO article(title, content, writer) VALUES(?, ?, ?)';
-            const postArticleResult = await db.queryParam_Parse(postArticleQuery, [title, content, writer]);
+            const postArticleQuery = 'INSERT INTO article(title, content, writer, blogIdx) VALUES(?, ?, ?, ?)';
+            const postArticleResult = await db.queryParam_Parse(postArticleQuery, [title, content, writer, blogIdx]);
 
             if(!postArticleResult) {
                 resolve({
@@ -41,10 +41,10 @@ const article = {
         });
     },
 
-    readOne: (articleIdx) => {
+    readOne: (blogIdx, articleIdx) => {
         return new Promise(async (resolve, reject) => {
-            const getArticleQuery = 'SELECT * FROM article WHERE articleIdx = ?';
-            const getArticleResult = await db.queryParam_Parse(getArticleQuery, [articleIdx]);
+            const getArticleQuery = 'SELECT * FROM article WHERE blogIdx = ? AND articleIdx = ?';
+            const getArticleResult = await db.queryParam_Parse(getArticleQuery, [blogIdx, articleIdx]);
 
             if(!getArticleResult) {
                 resolve({
@@ -63,10 +63,10 @@ const article = {
         });
     },
 
-    readAll: () => {
+    readAll: (blogIdx) => {
         return new Promise(async (resolve, reject) => {
-            const getAllArticleQuery = 'SELECT * FROM article';
-            const getAllArticleResult = await db.queryParam_Parse(getAllArticleQuery);
+            const getAllArticleQuery = 'SELECT * FROM article WHERE blogIdx = ?';
+            const getAllArticleResult = await db.queryParam_Parse(getAllArticleQuery, [blogIdx]);
 
             if(!getAllArticleResult) {
                 resolve({
@@ -87,12 +87,13 @@ const article = {
             });
         });
     },
+    
     update: ({
         articleIdx,
         title,
         content,
         writer
-    }) => {
+    }, blogIdx) => {
         return new Promise(async (resolve, reject) => {
             if(!articleIdx || !title || !content || !writer) {
                 resolve({
@@ -102,8 +103,8 @@ const article = {
                 return;
             }
 
-            const putArticleQuery = 'UPDATE article SET title = ?, content = ?, writer = ? WHERE articleIdx = ?';
-            const putArticleResult = await db.queryParam_Parse(putArticleQuery, [title, content, writer, articleIdx]);
+            const putArticleQuery = 'UPDATE article SET title = ?, content = ?, writer = ? WHERE blogIdx = ? AND articleIdx = ?';
+            const putArticleResult = await db.queryParam_Parse(putArticleQuery, [title, content, writer, blogIdx, articleIdx]);
             console.log(putArticleResult);
 
             if(!putArticleResult) {
@@ -121,7 +122,7 @@ const article = {
         });
     },
     
-    delete: ({articleIdx}) => {
+    delete: ({articleIdx}, blogIdx) => {
         return new Promise(async (resolve, reject) => {
             if(!articleIdx) {
                 resolve({
@@ -131,8 +132,8 @@ const article = {
                 return;
             }
 
-            const deleteArticleQuery = 'DELETE FROM article WHERE articleIdx = ?';
-            const deleteArticleResult = await db.queryParam_Parse(deleteArticleQuery, [articleIdx]);
+            const deleteArticleQuery = 'DELETE FROM article WHERE blogIdx = ? AND articleIdx = ?';
+            const deleteArticleResult = await db.queryParam_Parse(deleteArticleQuery, [blogIdx, articleIdx]);
             console.log(deleteArticleResult);
 
             if(!deleteArticleResult) {

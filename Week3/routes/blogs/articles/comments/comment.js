@@ -11,7 +11,7 @@ const THIS_LOG = "댓글";
 
 // 1. 댓글 전체 보기
 router.get('/', (req, res) => {
-    comment.readAll().then(({
+    comment.readAll(req.params.blogIdx, req.params.articleIdx).then(({
         code,
         json
     }) => {
@@ -24,7 +24,7 @@ router.get('/', (req, res) => {
 
 // 2. 댓글 하나 보기
 router.get('/:commentIdx', (req, res) => {
-    comment.readOne(req.params.commentIdx).then(({
+    comment.readOne(req.params.blogIdx, req.params.articleIdx, req.params.commentIdx).then(({
         code,
         json
     }) => {
@@ -37,7 +37,7 @@ router.get('/:commentIdx', (req, res) => {
 
 // 3. 댓글 생성하기
 router.post('/', (req, res) => {
-    comment.create(req.body).then(({
+    comment.create(req.body, req.params.blogIdx, req.params.articleIdx).then(({
         code,
         json
     }) => {
@@ -50,7 +50,7 @@ router.post('/', (req, res) => {
 
 // 4. 댓글 수정하기
 router.put('/', (req, res) => {
-    comment.update(req.body).then(({
+    comment.update(req.body, req.params.blogIdx, req.params.articleIdx).then(({
         code,
         json
     }) => {
@@ -63,7 +63,7 @@ router.put('/', (req, res) => {
 
 // 5. 댓글 삭제하기
 router.delete('/', (req, res) => {
-    comment.delete(req.body).then(({
+    comment.delete(req.body, req.params.blogIdx, req.params.articleIdx).then(({
         code,
         json
     }) => {

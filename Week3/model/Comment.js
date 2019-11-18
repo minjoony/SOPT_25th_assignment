@@ -13,7 +13,7 @@ const comment = {
         content,
         writer,
         date
-    }) => {
+    }, blogIdx, articleIdx) => {
         return new Promise(async (resolve, reject) => {
             if(!title || !content || !writer || !date) {
                 resolve({
@@ -22,8 +22,8 @@ const comment = {
                 });
                 return;
             }
-            const postCommentQuery = 'INSERT INTO comment(title, content, writer, date) VALUES(?, ?, ?, ?)';
-            const postCommentResult = await db.queryParam_Parse(postCommentQuery, [title, content, writer, date]);
+            const postCommentQuery = 'INSERT INTO comment(title, content, writer, date, blogIdx, articleIdx) VALUES(?, ?, ?, ?, ?, ?)';
+            const postCommentResult = await db.queryParam_Parse(postCommentQuery, [title, content, writer, date, blogIdx, articleIdx]);
 
             if(!postCommentResult) {
                 resolve({
@@ -40,7 +40,7 @@ const comment = {
         });
     },
     
-    readOne: (commentIdx) => {
+    readOne: (blogIdx, articleIdx, commentIdx) => {
         return new Promise(async (resolve, reject) => {
             if(!commentIdx) {
                 resolve({
@@ -50,8 +50,8 @@ const comment = {
                 return;
             }
 
-            const getCommentQuery = 'SELECT * FROM comment WHERE commentIdx = ?';
-            const getCommentResult = await db.queryParam_Parse(getCommentQuery, [commentIdx]);
+            const getCommentQuery = 'SELECT * FROM comment WHERE blogIdx = ? AND articleIdx = ? AND commentIdx = ?';
+            const getCommentResult = await db.queryParam_Parse(getCommentQuery, [blogIdx, articleIdx, commentIdx]);
 
             if(!getCommentResult) {
                 resolve({
@@ -68,10 +68,10 @@ const comment = {
             });
         });
     },
-    readAll: () => {
+    readAll: (blogIdx, articleIdx) => {
         return new Promise(async (resolve, reject) => {
-            const getAllCommentQuery = 'SELECT * FROM comment';
-            const getAllCommentResult = await db.queryParam_Parse(getAllCommentQuery);
+            const getAllCommentQuery = 'SELECT * FROM comment WHERE blogIdx = ? AND articleIdx = ?';
+            const getAllCommentResult = await db.queryParam_Parse(getAllCommentQuery, [blogIdx, articleIdx]);
 
             if(!getAllCommentResult) {
                 resolve({
@@ -99,7 +99,7 @@ const comment = {
         content,
         writer,
         date
-    }) => {
+    }, blogIdx, articleIdx) => {
         return new Promise(async (resolve, reject) => {
             if(!commentIdx || !title || !content || !writer || !date) {
                 resolve({
@@ -109,8 +109,8 @@ const comment = {
                 return;
             }
 
-            const putCommentQuery = 'UPDATE comment SET title = ?, content = ?, writer = ?, date = ? WHERE commentIdx = ?';
-            const putCommentResult = await db.queryParam_Parse(putCommentQuery, [title, content, writer, date, commentIdx]);
+            const putCommentQuery = 'UPDATE comment SET title = ?, content = ?, writer = ?, date = ? WHERE blogIdx = ? AND articleIdx = ? AND commentIdx = ?';
+            const putCommentResult = await db.queryParam_Parse(putCommentQuery, [title, content, writer, date, blogIdx, articleIdx, commentIdx]);
             console.log(putCommentResult);
 
             if(!putCommentResult) {
@@ -128,7 +128,7 @@ const comment = {
         });
     },
 
-    delete: ({commentIdx}) => {
+    delete: ({commentIdx}, blogIdx, articleIdx) => {
         return new Promise(async (resolve, reject) => {
             if(!commentIdx) {
                 resolve({
@@ -138,8 +138,8 @@ const comment = {
                 return;
             }
 
-            const deleteCommentQuery = 'DELETE FROM comment WHERE commentIdx = ?';
-            const deleteCommentResult = await db.queryParam_Parse(deleteCommentQuery, [commentIdx]);
+            const deleteCommentQuery = 'DELETE FROM comment WHERE blogIdx = ? AND articleIdx = ? AND commentIdx = ?';
+            const deleteCommentResult = await db.queryParam_Parse(deleteCommentQuery, [blogIdx, articleIdx, commentIdx]);
             console.log(deleteCommentResult);
 
             if(!deleteCommentResult) {

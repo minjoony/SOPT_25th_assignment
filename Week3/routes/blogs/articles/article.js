@@ -10,7 +10,7 @@ const THIS_LOG = "게시물";
 
 // 1. 게시물 전체 보기
 router.get('/', (req, res) => {
-    article.readAll().then(({
+    article.readAll(req.params.blogIdx).then(({
         code,
         json
     }) => {
@@ -23,7 +23,7 @@ router.get('/', (req, res) => {
 
 // 2. 게시물 하나 보기
 router.get('/:articleIdx', (req, res) => {
-    article.readOne(req.params.articleIdx).then(({
+    article.readOne(req.params.blogIdx, req.params.articleIdx).then(({
         code,
         json
     }) => {
@@ -36,7 +36,7 @@ router.get('/:articleIdx', (req, res) => {
 
 // 3. 게시물 생성하기
 router.post('/', (req, res) => {
-    article.create(req.body).then(({
+    article.create(req.body, req.params.blogIdx).then(({
         code,
         json
     }) => {
@@ -49,7 +49,7 @@ router.post('/', (req, res) => {
 
 // 4. 게시물 수정하기
 router.put('/', (req, res) => {
-    article.update(req.body).then(({
+    article.update(req.body, req.params.blogIdx).then(({
         code,
         json
     }) => {
@@ -62,7 +62,7 @@ router.put('/', (req, res) => {
 
 // 5. 게시물 삭제하기
 router.delete('/', (req, res) => {
-    article.delete(req.body).then(({
+    article.delete(req.body, req.params.blogIdx).then(({
         code,
         json
     }) => {
