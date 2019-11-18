@@ -44,7 +44,7 @@ const blog = {
         });
     },
 
-    readOne: (blogIdx) => {
+    readOne: (blogIdx) => { // readOne은 router.get에서 param으로 넘어오므로 변수.
         return new Promise(async (resolve, reject) => {
             const getBlogQuery = 'SELECT * FROM blog WHERE blogIdx = ?';
             const getBlogResult = await db.queryParam_Parse(getBlogQuery, [blogIdx]);
@@ -124,7 +124,7 @@ const blog = {
         });
     },
 
-    delete: ({blogIdx}) => {
+    delete: ({blogIdx}) => {    // delete은 router.delete에서 body로 넘어오므로 객체.
         return new Promise(async(resolve, reject) => {
             if(!blogIdx) {
                 resolve({
