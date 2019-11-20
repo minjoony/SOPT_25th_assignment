@@ -38,12 +38,11 @@ router.get('/:articleIdx', (req, res) => {
 
 // 3. 게시물 생성하기
 router.post('/', upload.array('images', 5), (req, res) => {
-    article.create(req.body, req.params.blogIdx).then(({
+    article.create(req.body, req.params.blogIdx, req.files[0].path).then(({
         code,
         json
     }) => {
         res.status(code).send({json,  file: req.files });
-        //res.send({ file: req.files });
     }).catch(err => {
         console.log(err);
         res.status(sC.BAD_REQUEST).send(aU.successFalse(rM.X_DELETE_FAIL(THIS_LOG)));

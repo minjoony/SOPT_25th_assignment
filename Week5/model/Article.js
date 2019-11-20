@@ -12,7 +12,7 @@ const article = {
         title,
         content,
         writer
-    }, blogIdx) => {
+    }, blogIdx, filePath) => {
         return new Promise(async (resolve, reject) => {
             console.log(title, content, writer);
             if(!title || !content || !writer) {
@@ -22,9 +22,9 @@ const article = {
                 });
                 return;
             }
-
-            const postArticleQuery = 'INSERT INTO article(title, content, writer, blogIdx) VALUES(?, ?, ?, ?)';
-            const postArticleResult = await db.queryParam_Parse(postArticleQuery, [title, content, writer, blogIdx]);
+            console.log(filePath);
+            const postArticleQuery = 'INSERT INTO article(title, content, writer, blogIdx, image) VALUES(?, ?, ?, ?, ?)';
+            const postArticleResult = await db.queryParam_Parse(postArticleQuery, [title, content, writer, blogIdx, filePath]);
 
             if(!postArticleResult) {
                 resolve({
