@@ -22,6 +22,12 @@ const article = {
                 });
                 return;
             }
+            if(!filePath)
+            {
+                console.log("null 값");
+                filePath = null;
+            }
+
             console.log(filePath);
             const postArticleQuery = 'INSERT INTO article(title, content, writer, blogIdx, image) VALUES(?, ?, ?, ?, ?)';
             const postArticleResult = await db.queryParam_Parse(postArticleQuery, [title, content, writer, blogIdx, filePath]);
