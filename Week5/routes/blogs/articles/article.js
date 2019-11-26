@@ -5,8 +5,9 @@ const rM = require('../../../module/utils/responseMessage');
 const aU = require('../../../module/utils/authUtil');
 const sC = require('../../../module/utils/statusCode');
 const article = require('../../../model/Article');
-const multer = require('multer');
-const upload = multer({ dest: 'uploads/' });
+//const multer = require('multer');
+//const upload = multer({ dest: 'uploads/' });
+const upload = require('../../../config/multer');
 
 const THIS_LOG = "게시물";
 
@@ -38,7 +39,7 @@ router.get('/:articleIdx', (req, res) => {
 
 // 3. 게시물 생성하기
 router.post('/', upload.array('images', 5), (req, res) => {
-    article.create(req.body, req.params.blogIdx, req.files[0].path).then(({
+    article.create(req.body, req.params.blogIdx, req.files[0].location).then(({
         code,
         json
     }) => {
