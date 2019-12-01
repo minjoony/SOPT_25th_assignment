@@ -32,7 +32,7 @@ const article = {
             const postArticleQuery = 'INSERT INTO article(title, content, writer, blogIdx, image) VALUES(?, ?, ?, ?, ?)';
             const postArticleResult = await db.queryParam_Parse(postArticleQuery, [title, content, writer, blogIdx, filePath]);
 
-            if(!postArticleResult) {
+            if(!postArticleResult || postArticleResult.length == 0) {
                 resolve({
                     code: sC.NOT_FOUND,
                     json: aU.successFalse(rM.X_CREATE_FAIL(THIS_LOG))
@@ -52,7 +52,7 @@ const article = {
             const getArticleQuery = 'SELECT * FROM article WHERE blogIdx = ? AND articleIdx = ?';
             const getArticleResult = await db.queryParam_Parse(getArticleQuery, [blogIdx, articleIdx]);
 
-            if(!getArticleResult) {
+            if(!getArticleResult || getArticleResult.length == 0) {
                 resolve({
                     code: sC.NOT_FOUND,
                     json: aU.successFalse(rM.X_READ_FAIL(THIS_LOG))
@@ -74,7 +74,7 @@ const article = {
             const getAllArticleQuery = 'SELECT * FROM article WHERE blogIdx = ?';
             const getAllArticleResult = await db.queryParam_Parse(getAllArticleQuery, [blogIdx]);
 
-            if(!getAllArticleResult) {
+            if(!getAllArticleResult || getAllArticleResult.length == 0) {
                 resolve({
                     code: sC.NOT_FOUND,
                     json: aU.successFalse(rM.X_READ_ALL_FAIL(THIS_LOG))
@@ -113,7 +113,7 @@ const article = {
             const putArticleResult = await db.queryParam_Parse(putArticleQuery, [title, content, writer, blogIdx, articleIdx]);
             console.log(putArticleResult);
 
-            if(!putArticleResult) {
+            if(!putArticleResult || putArticleResult.length == 0) {
                 resolve({
                     code: sC.NOT_FOUND,
                     json: aU.successFalse(rM.X_UPDATE_FAIL(THIS_LOG))
@@ -142,7 +142,7 @@ const article = {
             const deleteArticleResult = await db.queryParam_Parse(deleteArticleQuery, [blogIdx, articleIdx]);
             console.log(deleteArticleResult);
 
-            if(!deleteArticleResult) {
+            if(!deleteArticleResult || deleteArticleResult.length == 0) {
                 resolve({
                     code: sC.NOT_FOUND,
                     json: aU.successFalse(rM.X_DELETE_FAIL(THIS_LOG))

@@ -15,14 +15,14 @@ const User = require('../model/User');
 */
 
 router.post('/signin', (req, res) => {
-  const {id, pwd} = req.body;
+  const {userId, userPwd} = req.body;
 
-  if(!id || !pwd) {
+  if(!userId || !userPwd) {
     res.status(sC.BAD_REQUEST).send(aU.successFalse(rM.NULL_VALUE));
     return;
   }
 
-  User.signin(id, pwd)
+  User.signin(userId, userPwd)
   .then(({code, json}) => {
      res.status(code).send(json);
   })
@@ -33,15 +33,15 @@ router.post('/signin', (req, res) => {
 })
 
 router.post('/signup', (req, res) => {
-  const {id, pwd} = req.body;
+  const {userId, userPwd} = req.body;
 
   // 파라미터 오류
-  if(!id || !pwd) {
+  if(!userId || !userPwd) {
     res.status(sC.BAD_REQUEST).send(aU.successFalse(rM.NULL_VALUE));
     return;
   }
 
-  User.signup(id, pwd)
+  User.signup(userId, userPwd)
   .then(({code, json}) => {
     res.status(code).send(json);
   })

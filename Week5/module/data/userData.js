@@ -1,9 +1,9 @@
 module.exports =
     (origin_userData) => {
         userData = {
-            "userIdx" : origin_commentData.userIdx,
-            "userId" : origin_commentData.userId,
-            "userPwd" : origin_commentData.userPwd
+            "userIdx" : origin_userData.userIdx,
+            "userId" : origin_userData.userId,
+            "userPwd" : origin_userData.userPwd
         }
         return userData;
     }

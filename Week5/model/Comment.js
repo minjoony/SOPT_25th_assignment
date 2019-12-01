@@ -53,7 +53,7 @@ const comment = {
             const getCommentQuery = 'SELECT * FROM comment WHERE blogIdx = ? AND articleIdx = ? AND commentIdx = ?';
             const getCommentResult = await db.queryParam_Parse(getCommentQuery, [blogIdx, articleIdx, commentIdx]);
 
-            if(!getCommentResult) {
+            if(!getCommentResult || getCommentResult.length == 0) {
                 resolve({
                     code: sC.NOT_FOUND,
                     json: aU.successFalse(rM.X_READ_FAIL(THIS_LOG))
@@ -73,7 +73,7 @@ const comment = {
             const getAllCommentQuery = 'SELECT * FROM comment WHERE blogIdx = ? AND articleIdx = ?';
             const getAllCommentResult = await db.queryParam_Parse(getAllCommentQuery, [blogIdx, articleIdx]);
 
-            if(!getAllCommentResult) {
+            if(!getAllCommentResult || getAllCommentResult.length == 0) {
                 resolve({
                     code: sC.NOT_FOUND,
                     json: aU.successFalse(rM.X_READ_FAIL(THIS_LOG))
@@ -113,7 +113,7 @@ const comment = {
             const putCommentResult = await db.queryParam_Parse(putCommentQuery, [title, content, writer, date, blogIdx, articleIdx, commentIdx]);
             console.log(putCommentResult);
 
-            if(!putCommentResult) {
+            if(!putCommentResult || putCommentResult.length == 0) {
                 resolve({
                     code: sC.NOT_FOUND,
                     json: aU.successFalse(rM.X_UPDATE_FAIL(THIS_LOG))
@@ -142,7 +142,7 @@ const comment = {
             const deleteCommentResult = await db.queryParam_Parse(deleteCommentQuery, [blogIdx, articleIdx, commentIdx]);
             console.log(deleteCommentResult);
 
-            if(!deleteCommentResult) {
+            if(!deleteCommentResult || deleteCommentResult.length == 0) {
                 resolve({
                     code: sC.NOT_FOUND,
                     json: aU.successFalse(rM.X_DELETE_FAIL(THIS_LOG))

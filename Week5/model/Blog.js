@@ -29,7 +29,7 @@ const blog = {
 
             //const blog = blogData(postBlogResult[0]);
 
-            if(!postBlogResult) {
+            if(!postBlogResult || postBlogResult.length == 0) {
                 resolve({
                     code: sC.NOT_FOUND,
                     json: aU.successFalse(rM.X_CREATE_FAIL(THIS_LOG))
@@ -49,7 +49,7 @@ const blog = {
             const getBlogQuery = 'SELECT * FROM blog WHERE blogIdx = ?';
             const getBlogResult = await db.queryParam_Parse(getBlogQuery, [blogIdx]);
 
-            if(!getBlogResult) {
+            if(!getBlogResult || getBlogResult.length == 0) {
                 resolve({
                     code: sC.NOT_FOUND,
                     json: aU.successFalse(rM.X_READ_FAIL(THIS_LOG))
@@ -71,7 +71,7 @@ const blog = {
             const getAllBlogQuery = "SELECT * FROM blog";
             const getAllBlogResult = await db.queryParam_None(getAllBlogQuery);
 
-            if(!getAllBlogResult) {
+            if(!getAllBlogResult || getAllBlogResult.length == 0) {
                 resolve({
                     code: sC.NOT_FOUND,
                     json: aU.successFalse(rM.X_READ_ALL_FAIL(THIS_LOG))
@@ -109,7 +109,7 @@ const blog = {
             const putBlogQuery = 'UPDATE blog SET title = ?, content = ?, writer = ?, date = ? WHERE blogIdx = ?';
             const putBlogResult = await db.queryParam_Parse(putBlogQuery, [title, content, writer, date, blogIdx])  // 순서 맞아야함
             console.log(putBlogResult);
-            if(!putBlogResult) {
+            if(!putBlogResult || putBlogResult.length == 0) {
                 resolve({
                     code: sC.NOT_FOUND,
                     json: aU.successFalse(rM.X_UPDATE_FAIL(THIS_LOG))
@@ -137,7 +137,7 @@ const blog = {
             const deleteBlogResult = await db.queryParam_Parse(deleteBlogQuery,[blogIdx]);
             console.log(deleteBlogResult);
 
-            if(!deleteBlogResult) {
+            if(!deleteBlogResult || deleteBlogResult.length == 0) {
                 resolve({
                     code: sC.NOT_FOUND,
                     json: aU.successFalse(rM.X_DELETE_FAIL(THIS_LOG))
