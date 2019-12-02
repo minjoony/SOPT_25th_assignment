@@ -9,19 +9,6 @@ const userData = require('../module/data/userData');
 module.exports = {
     signin: (userId, userPwd) => {
         return new Promise(async (resolve, reject) => {
-            // 유저가 존재하는지 체크
-            /*
-            const user = userData.find(it => it.id == id);
-            console.log(user);
-
-            if(!user) {
-                resolve({
-                    code: sC.BAD_REQUEST,
-                    json: aU.successFalse(rM.NO_USER)
-                });
-                return;
-            }
-            */
             const getUserQuery = 'SELECT * FROM user WHERE userId = ? AND userPwd = ?';
             const getUserResult = await db.queryParam_Parse(getUserQuery, [userId, userPwd]);
             
@@ -41,6 +28,7 @@ module.exports = {
                     return;
                 }
 
+                // 로그인 실패 2. pwd가 틀린 경우
                 else if(!getUserPwdResult || getUserPwdResult.length == 0)
                 {
                     resolve({
@@ -50,6 +38,7 @@ module.exports = {
                     return;
                 }
 
+                // 그 외의 로그인 실패하는 경우
                 else
                 {
                     resolve({
@@ -71,15 +60,18 @@ module.exports = {
     signup: (userId, userPwd) => {
         return new Promise(async (resolve, reject) => {
             // 아이디 중복 체크
-            /*
-            if(userData.filter(it => it.id == id).length > 0) {
+            const checkIdQuery = 'SELECT userId FROM user WHERE userId = ?';
+            const checkIdResult = await db.queryParam_Parse(checkIdQuery, [userId]);
+
+            if(checkIdResult.length != 0)
+            {
                 resolve({
-                    code: sC.BAD_REQUEST,
+                    code: sC.NOT_FOUND,
                     json: aU.successFalse(rM.ALREADY_ID)
-                });     
+                });
                 return;
             }
-            */
+
             const signupUserQuery = 'INSERT INTO user(userId, userPwd) VALUES(?, ?)';
             const signupUserResult = await db.queryParam_Parse(signupUserQuery, [userId, userPwd]);
 
