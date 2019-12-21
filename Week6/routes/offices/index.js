@@ -1,17 +1,20 @@
 const express = require("express");
 const router = express.Router();
 
-/* GET home page. */
+const aU = require('../../module/utils/authUtil');
+const rM = require('../../module/utils/responseMessage');
+const sC = require('../../module/utils/statusCode');
+
+const Office = require('../../model/Office');
+
 router.get("/", function(req, res, next) {
-  res.json({
-    success: "true",
-    message: "전체 조회 성공",
-    data: [
-      { officeIdx: 1, officeNum: 100, numOfBicycle: 7 },
-      { officeIdx: 2, officeNum: 101, numOfBicycle: 9 },
-      { officeIdx: 3, officeNum: 102, numOfBicycle: 2 }
-    ]
-  });
+  Office.getAll().then(({code, json}) => {
+    res.status(code).send(json);
+  })
+  .catch(err => {
+    console.log(err);
+    res.status(sC.INTERNAL_SERVER_ERROR).send(aU.successFalse(rM.GET_OFFICE_FAIL));
+  })
 });
 
 module.exports = router;
